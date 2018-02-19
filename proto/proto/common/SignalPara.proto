@@ -1,0 +1,9 @@
+package common;
+
+//for sigpara general k/v para
+message SignalPara {
+	required string key = 1;
+	required string val = 2;
+}
+
+

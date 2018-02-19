@@ -1,0 +1,9 @@
+package chat;
+
+// chat temp channel create 
+message ChatChannelCreate {
+	required int64 userId = 1;
+	optional string name = 2;
+	optional string channelId = 3;//for return 
+}
+

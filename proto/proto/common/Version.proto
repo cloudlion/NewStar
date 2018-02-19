@@ -1,0 +1,8 @@
+package common;
+message Version {
+    repeated string name = 1;
+    repeated uint32 version = 2;
+    optional uint32 platform = 3;//1:apple 2:google
+    optional string language = 4;//client language
+    repeated string md5 = 5;
+}

@@ -1,0 +1,6 @@
+package common;
+message MainTain {
+	required string serviceType = 1;//proxy,hamal,chat,etc.
+	required int32 status = 2;//0:actived 1:busy 3:maintain
+	required int32 endTime = 3;//0:forever or specified end time
+}

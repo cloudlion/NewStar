@@ -1,0 +1,8 @@
+package assets;
+
+message BundleInfo {
+
+    optional string name = 1;
+    repeated string deps = 2;
+}
+

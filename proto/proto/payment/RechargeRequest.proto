@@ -1,0 +1,7 @@
+package payment;
+
+message RechargeRequest 
+{
+	required int64 userId = 1;
+	optional int32 countryCode = 2;
+}

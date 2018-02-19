@@ -1,0 +1,13 @@
+package payment;
+
+message PayVerifyRequest {
+	required int64 userId = 1;
+	required int32 rechargeId = 2;
+	optional int32 platform = 3;//1:apple 2:google 3:amazon
+	optional string receiptData = 4;//json receipt string data
+	optional bool ret = 5;//true:success false:failed
+	optional int32 errcode = 6;
+	optional string currencyCode = 7;//like 'US', 'CN', etc.
+	optional string idfa = 8;//adverting id
+	optional bytes receiptByteData = 9;//receipt data byte format
+}

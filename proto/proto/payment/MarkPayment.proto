@@ -1,0 +1,8 @@
+package payment;
+
+message MarkPayment
+{
+    optional int32 platform = 1;
+    optional int32 rechargeId = 2;
+    optional int32 payoutId = 3;
+}

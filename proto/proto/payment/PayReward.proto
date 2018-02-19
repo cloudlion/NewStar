@@ -1,0 +1,8 @@
+package payment;
+
+message PayReward {
+	required int64 userId = 1;
+	required int32 rechargeId = 2;
+	optional int32 diamonds = 3;
+	repeated int32 rewards = 4;
+}

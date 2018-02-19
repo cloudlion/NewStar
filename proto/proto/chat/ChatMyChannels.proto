@@ -1,0 +1,9 @@
+package chat;
+
+import "proto/chat/ChatChannelObj.proto";
+
+//for chat temp channel of user 
+message ChatMyChannels {
+	repeated ChatChannelObj channels = 1;
+}
+

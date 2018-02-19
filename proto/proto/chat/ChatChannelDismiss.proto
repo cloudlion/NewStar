@@ -1,0 +1,8 @@
+package chat;
+
+//chat temp channel dismiss 
+message ChatChannelDismiss {
+	required int64 userId = 1;
+	required string channelId = 2;
+}
+

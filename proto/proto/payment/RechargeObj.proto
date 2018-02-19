@@ -1,0 +1,6 @@
+package payment;
+
+message RechargeObj {
+	required int32 rechargeId = 1;
+	optional int32 buyTimes = 2; 
+}

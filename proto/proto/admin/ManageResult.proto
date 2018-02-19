@@ -1,0 +1,12 @@
+package admin;
+
+//for manager response
+message ManageResult {
+	required int32 ret = 1;
+	optional int32 errcode = 2;
+	optional string errmsg = 3; 
+	optional string jsonrecs = 4;
+}
+
+
+

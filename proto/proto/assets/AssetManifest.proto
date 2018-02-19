@@ -1,0 +1,9 @@
+package assets;
+import "proto/assets/AssetInfo.proto";
+import "proto/assets/BundleInfo.proto";
+
+message AssetManifest{
+    optional string version = 1;
+    repeated BundleInfo bundleList = 2;
+    repeated AssetInfo  assetList = 3;
+}

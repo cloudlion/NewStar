@@ -1,0 +1,20 @@
+package common;
+
+import "proto/common/byteObj.proto";
+
+//for packet protocol
+message packet {
+	required int32 funcode = 1;
+	optional int32 opcode = 2;
+	optional bytes data = 3;
+	optional string hamalNode = 4;//used for php
+	optional bytes clientPid = 5;//used for php
+	optional int64 playerId = 6;//used for cast data
+	optional int64 timestamp = 7;//used for data unique
+	repeated byteObj batchPackets = 8;//used for batch data to signal receiver
+	repeated int32 castDataIds = 9;//[castType,catId,subCatId]
+	repeated float castReceiverIds = 10;//special receiver user id list
+	optional string clientIp = 11;//client ip address
+}
+
+

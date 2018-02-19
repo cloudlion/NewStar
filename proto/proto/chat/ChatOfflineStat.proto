@@ -1,0 +1,10 @@
+package chat;
+
+// chat offline stat, only for private chat notify
+message ChatOfflineStat {
+	optional int32 page = 1;//used for get more?
+	repeated int64 userIds = 2;
+	repeated string userNicks = 3;
+	repeated int32 offlineTimes = 4;//last timestamp
+}
+

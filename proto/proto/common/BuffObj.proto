@@ -1,0 +1,10 @@
+package common;
+
+message BuffObj {
+    required int32 id = 1;
+    optional int32 detailGroup = 5;
+    optional int64 detailId = 6;
+    optional int32 expire = 7;
+    optional float ratio = 8;
+    optional int32 tag = 9;
+}

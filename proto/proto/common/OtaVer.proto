@@ -1,0 +1,12 @@
+package common;
+message OtaVer {
+    required uint32 otaVer = 1;
+    required uint32 ver = 2;
+    optional string md5 = 3;
+    optional string host = 4;
+    optional string path = 5;
+    optional string suffix = 6;
+	optional uint32 clientVer = 7;
+	optional uint32 clientUpgrade = 8;
+	optional string appDownloadUrl = 9;
+}

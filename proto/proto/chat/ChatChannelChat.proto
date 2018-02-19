@@ -1,0 +1,17 @@
+package chat;
+
+//chat temp channel chat info 
+message ChatChannelChat {
+	message ChatExtData {
+	    optional int32 type = 1;//data type
+	    optional string data = 2;//data detail
+	}
+	required string channelId = 1;
+	required int64 userId = 2; 
+	optional string userNick = 3;//filled by server
+	optional string msg = 4;
+	optional int32 sendTime = 5;//for return, used for show time
+	optional int64 microTime = 6;//for return, used for client unique storage
+	optional int32 portraitId = 7;
+	repeated ChatExtData extDatas = 8;//chat ext data list
+}

@@ -1,0 +1,14 @@
+package loading;
+
+message LoadingRecord
+{
+    message Record{
+        optional int32 step = 1;
+        optional int32 start = 2;
+        optional int32 end = 3;
+        optional int32 num = 4;
+    }
+    optional int64 userId = 1;
+    repeated Record record = 2;
+    
+}

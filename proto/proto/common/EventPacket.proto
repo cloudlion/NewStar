@@ -1,0 +1,10 @@
+package common;
+
+//for event packet protocol
+message EventPacket {
+	required string proxyNode = 1;
+	optional bytes clientPid = 2;
+	optional int32 funcode = 3;
+	optional bytes packetData = 4;
+}
+

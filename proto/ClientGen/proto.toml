@@ -1,0 +1,84 @@
+[Proto]
+ProtoDir = "./proto"
+
+RubyDir = "../../mad_max_be/ruby/lib/proto"
+
+GoDir = "../../mad_max_be/go/src/mm"
+
+
+MonoCmd = "/Applications/MonoDevelop_4.0.1.app/Contents/Frameworks/Mono.framework/Versions/2.10.12/bin/mono"
+
+CsharpProtoGenCmd = "./ClientGen//ProtoGen/protogen.exe"
+
+CsharpDir = "../client/Assets/Script/proto"
+
+
+[Gds]
+GdsDir = "../../mad_max_be/gds"
+GoDir = "../../mad_max_be/go/src/mm/gds"
+	[[Gds.List]]
+	File = "city_building"
+	Keys = ["type_id", "level"]
+	[[Gds.List]]
+	File = "building_type"
+	Keys = ["type_id"]
+    [[Gds.List]]
+	File = "resource_product"
+	Keys = ["type_id", "level"]
+    [[Gds.List]]
+	File = "resource_storage"
+	Keys = ["level", "resource_id"]
+    [[Gds.List]]
+	File = "car_requirement"
+	Keys = ["id"]
+    [[Gds.List]]
+	File = "item"
+	Keys = ["id"]
+    [[Gds.List]]
+	File = "item_store"
+	Keys = ["item_id"]
+    [[Gds.List]]
+    File = "alliance_limit"
+    Keys = ["id"]
+    [[Gds.List]]
+    File = "alliance_level"
+    Keys = ["level"]
+    [[Gds.List]]
+    File = "alliance_quest"
+    Keys = ["id"]
+    [[Gds.List]]
+    File = "alliance_gift"
+    Keys = ["gift_level"]
+    [[Gds.List]]
+    	File = "car_equipment"
+    	Keys = ["eq_id"]
+    [[Gds.List]]
+    	File = "car_levelstats"
+    	Keys = ["car_index", "car_level"]
+    [[Gds.List]]
+    	File = "eq_blueprint"
+    	Keys = ["id"]
+    [[Gds.List]]
+    	File = "research_set"
+    	Keys = ["research_id", "level"]
+    [[Gds.List]]
+    	File = "research"
+    	Keys = ["id"]
+    [[Gds.List]]
+        File = "monster_car"
+        Keys = ["id"]
+    [[Gds.List]]
+    	File = "worldmap_range"
+    	Keys = ["id"]
+    [[Gds.List]]
+    	File = "worldmap_resourcetile"
+    	Keys = ["resource_field_type","resource_field_level"]
+    [[Gds.List]]
+    	File = "worldmap_pvetile"
+    	Keys = ["pve_field_lv"]
+    [[Gds.List]]
+    	File = "newplayer_tilerange"
+    	Keys = ["range_id"]
+    [[Gds.List]]
+    	File = "eq_set"
+    	Keys = ["eq_set_id"]

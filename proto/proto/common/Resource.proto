@@ -1,0 +1,11 @@
+package common;
+
+message Resource {
+	optional int32 food = 1;
+	optional int32 wood = 2;
+	optional int32 stone = 3;
+	optional int32 ore = 4;
+	optional int32 gold = 5;
+	optional int32 diamond = 6;
+}
+

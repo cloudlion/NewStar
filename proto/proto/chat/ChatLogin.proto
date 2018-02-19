@@ -1,0 +1,12 @@
+package chat;
+
+// for chat login
+message ChatLogin {
+	required int64 userId = 1;
+	optional string nick = 2;
+	optional int32 realmId = 3;
+	optional int32 realmLevel = 4;
+	optional int64 allianceId = 5;
+	optional string language = 6;//client machine language
+}
+

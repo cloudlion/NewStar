@@ -1,0 +1,9 @@
+package chat;
+
+//chat block player member 
+message ChatBlock {
+	required int64 userId = 1;
+	required int64 blockedUserId = 2;
+	optional int64 allianceId = 3;
+}
+

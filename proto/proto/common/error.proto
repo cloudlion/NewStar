@@ -1,0 +1,10 @@
+package common;
+//for error protocol
+message error {
+	required int32 funcode = 1;//same value of packet
+	optional int32 errcode = 2;
+	optional int32 popup = 3;
+	optional int32 restart = 4;
+	optional string info = 5;
+}
+

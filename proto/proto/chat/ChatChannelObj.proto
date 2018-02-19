@@ -1,0 +1,10 @@
+package chat;
+
+//chat temp channel info 
+message ChatChannelObj {
+	required string channelId = 1;
+	optional string name = 2;
+	optional int32 ownerId = 3;
+	repeated int32 memberIds = 4;		
+}
+

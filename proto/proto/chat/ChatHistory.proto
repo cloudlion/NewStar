@@ -1,0 +1,14 @@
+package chat;
+
+//  forchat history 
+message ChatHistory {
+	required int32 type = 1;//0:global 1:realm 2:alliance 3:private 4:channel
+	optional int32 realmId = 2;
+	optional int32 realmLevel = 3;
+	optional int64 allianceId = 4;
+	optional string privaters = 5;
+	optional int32 page = 6;
+	repeated bytes chats = 7;
+	optional string channelId = 8;
+}
+

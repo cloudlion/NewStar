@@ -1,0 +1,15 @@
+package common;
+
+message FrontError
+{
+    optional int64 dt = 1;
+    optional int64 userId = 2;
+    optional string mobile = 3;
+    optional string os = 4;
+    optional string osVer = 5;
+    optional string gameVer = 6;
+    optional string packet = 7;
+    optional string msg = 8;
+    optional bytes stack = 9;
+    optional string errorType = 10;
+}

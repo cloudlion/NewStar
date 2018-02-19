@@ -1,0 +1,11 @@
+package chat;
+
+message ChatTranslate {
+	required string msgId = 1;
+	required string destLang = 2;
+	optional string orgMsg = 3;
+	optional string destMsg = 4;//for return
+	optional bool ret = 5;//for return
+	optional string orgLang = 6;//for return
+}
+

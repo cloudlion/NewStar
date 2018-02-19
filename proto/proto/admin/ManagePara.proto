@@ -1,0 +1,9 @@
+package admin;
+
+import "proto/common/SignalPara.proto";
+
+//for manager para 
+message ManagePara {
+	repeated common.SignalPara paras = 1;	
+}
+

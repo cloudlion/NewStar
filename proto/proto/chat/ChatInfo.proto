@@ -1,0 +1,39 @@
+package chat;
+
+//realm info
+message realmInfo {
+	required int32 realmLevel = 1;
+	repeated int32 realmIds = 2; 
+}
+
+message ChatExtData {
+	optional int32 type = 1;//data type
+	optional string data = 2;//data detail
+}
+
+// chat
+message ChatInfo {
+	required int64 userId = 1; 
+	optional string userNick = 2;//filled by server
+	optional int32 realmId = 3;
+	optional int32 realmLevel = 4;
+	optional int64 allianceId = 5;
+	optional int64 receiverId = 6;//private chat receiver id
+	optional string msg = 7;
+	optional bytes extBinData = 8;//for chat help etc.
+	optional int32 sendTime = 9;//for return, used for show time
+	optional int64 microTime = 10;//for return, used for client unique storage
+	optional int32 portraitId = 11;
+	optional string allianceName = 12;
+	optional int32 vipLevel = 13;
+	repeated ChatExtData extDatas = 14;//chat ext data list
+	optional string secretKey = 15;//used for internal app send
+	optional int32 isGlobal = 16;//is global chat
+	optional int32 isGlobalFree = 17;//is global free chat, has times limit.
+	optional string receiverNick = 18;
+	optional int32 receiverPortraitId = 19;
+	optional int32 isSystem = 20;//is system chat
+	repeated realmInfo realms = 21;//used for system chat
+	repeated string extStrDatas = 22;//chat ext string data list  
+}
+

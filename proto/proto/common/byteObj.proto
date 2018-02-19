@@ -1,0 +1,5 @@
+package common;
+message byteObj {
+	optional bytes packet = 1;
+}
+

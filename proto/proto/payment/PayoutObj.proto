@@ -1,0 +1,7 @@
+package payment;
+
+message PayoutObj {
+    required int32 payoutId = 1;
+    required string productId = 2;
+    optional float currency = 3;
+}

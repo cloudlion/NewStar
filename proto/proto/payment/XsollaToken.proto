@@ -1,0 +1,6 @@
+package payment;
+
+message XsollaToken {
+    required string token = 1;
+    required string userId = 2; 
+}

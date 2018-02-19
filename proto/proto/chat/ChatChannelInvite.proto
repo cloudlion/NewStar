@@ -1,0 +1,9 @@
+package chat;
+
+// chat temp channel invite 
+message ChatChannelInvite {
+	required int64 userId = 1;
+	required string channelId = 2;
+	repeated float memberIds = 3;
+}
+

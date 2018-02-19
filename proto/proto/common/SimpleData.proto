@@ -1,0 +1,6 @@
+package common;
+
+message SimpleData {
+	optional bytes data = 1;
+}
+

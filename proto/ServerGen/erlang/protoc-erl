@@ -1,0 +1,14 @@
+#!/usr/bin/env escript
+%% -*- erlang -*-
+%%! -sasl errlog_type error -boot start_sasl -noshell
+%%! -pz ./ebin ./bin
+
+main ([File]) ->
+  Script = filename:dirname(escript:script_name()),
+  io:format("script:~p~n", [Script]),
+  code:add_pathz(Script ++ "/../../../server/egs/3rd/protobuffs-0.8.0/ebin/"),
+  protobuffs_compile:generate_source (File);
+main (_) ->
+  io:format ("usage: ~s <protofile>~n",
+             [filename:basename (escript:script_name())]),
+  halt (1).
