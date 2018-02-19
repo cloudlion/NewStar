@@ -1,0 +1,24 @@
+[Proto]
+ProtoDir = "/Users/bozhang/Works/mad_max_tool/mad_proto"
+
+RubyDir = "/Users/bozhang/Works/mad_max_be/ruby/lib/proto"
+
+GoDir = "/Users/bozhang/Works/mad_max_be/go/src/mm"
+
+
+MonoCmd = "/Applications/Unity/MonoDevelop.app/Contents/Frameworks/Mono.framework/Versions/2.10.11/bin/mono"
+
+CsharpProtoGenCmd = "/Users/bozhang/Works/mad_max_tool/mad_tool/ProtoGen/protogen.exe"
+
+CsharpDir = "/Users/bozhang/Works/hello/hello"
+
+
+[Gds]
+GdsDir = "/Users/bozhang/Works/mad_max_be/gds"
+GoDir = "/Users/bozhang/Works/mad_max_be/go/src/mm/gds"
+	[[Gds.List]]
+	File = "city_building"
+	Keys = ["type_id", "level"]
+	[[Gds.List]]
+	File = "building_type"
+	Keys = ["type_id"]

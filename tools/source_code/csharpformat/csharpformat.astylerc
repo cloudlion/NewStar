@@ -1,0 +1,42 @@
+# options
+--indent=spaces=4
+--style=allman
+--indent-namespaces
+--add-brackets
+--convert-tabs
+--pad-header
+--recursive
+--suffix=none
+--lineend=linux
+--formatted
+--ignore-exclude-errors-x
+
+# exclude mad_max_fe
+--exclude=mad_unity/Assets/Editor/FingerGestures
+--exclude=mad_unity/Assets/Editor/NGUI
+--exclude=mad_unity/Assets/Editor/TexturePackerImporter
+--exclude=mad_unity/Assets/Plugins/FingerGestures
+--exclude=mad_unity/Assets/Plugins/GoKit
+--exclude=mad_unity/Assets/Plugins/lib/protobuf-net
+--exclude=mad_unity/Assets/Plugins/mad/zlib
+--exclude=mad_unity/Assets/Plugins/NGUI
+--exclude=mad_unity/Assets/Script/res_script
+#--exclude=mad_unity/Assets/Script/proto
+--exclude=mad_unity/Assets/Script/gamedata
+
+# exclude mad_max_art
+--exclude=mad_res/lib/tool/Editor/zlib
+--exclude=mad_res/unity_gamedata/Assets/Editor/zlib
+--exclude=mad_res/unity_ngui/Assets/Editor/GoDummyPathEditor.cs
+--exclude=mad_res/unity_ngui/Assets/Editor/NGUI
+--exclude=mad_res/unity_ngui/Assets/Editor/zlib
+--exclude=mad_res/unity_ngui/Assets/GoKit
+--exclude=mad_res/unity_ngui/Assets/NGUI
+--exclude=mad_res/unity_ngui/Assets/Plugins/GoKit
+--exclude=mad_res/unity_ngui/Assets/Plugins/NGUI
+--exclude=mad_res/unity_prefab/Assets/Editor/zlib
+--exclude=mad_res/unity_prefab_2d/Assets/Editor/zlib
+--exclude=mad_res/unity_raw/Assets/Editor/zlib
+--exclude=mad_res/unity_scene/Assets/Editor/zlib
+--exclude=mad_res/unity_scene_2d/Assets/Editor/zlib
+
