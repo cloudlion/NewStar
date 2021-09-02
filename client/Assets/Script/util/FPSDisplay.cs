@@ -81,15 +81,15 @@ public class FPSDisplay : MonoBehaviour {
 			sum += Check(typeof(AudioClip));
 
 			StringBuilder sb = new StringBuilder();
-			sb.Append("#Profiler.GetMonoHeapSize:" + Profiler.GetMonoHeapSize()/(1024f * 1024f) + "\n");
-			sb.Append("#Profiler.GetMonoUsedSize:" + Profiler.GetMonoUsedSize()/(1024f * 1024f) + "\n");
+			sb.Append("#Profiler.GetMonoHeapSize:" + UnityEngine.Profiling.Profiler.GetMonoHeapSize()/(1024f * 1024f) + "\n");
+			sb.Append("#Profiler.GetMonoUsedSize:" + UnityEngine.Profiling.Profiler.GetMonoUsedSize()/(1024f * 1024f) + "\n");
 
-			sb.Append("#Profiler.GetTotalAllocatedMemory:" + Profiler.GetTotalAllocatedMemory()/(1024f * 1024f) + "\n");
-			sb.Append("#Profiler.GetTotalReservedMemory:" + Profiler.GetTotalReservedMemory()/(1024f * 1024f) + "\n");
-			sb.Append("#Profiler.GetTotalUnusedReservedMemory:" + Profiler.GetTotalUnusedReservedMemory()/(1024f * 1024f) + "\n");
+			sb.Append("#Profiler.GetTotalAllocatedMemory:" + UnityEngine.Profiling.Profiler.GetTotalAllocatedMemory()/(1024f * 1024f) + "\n");
+			sb.Append("#Profiler.GetTotalReservedMemory:" + UnityEngine.Profiling.Profiler.GetTotalReservedMemory()/(1024f * 1024f) + "\n");
+			sb.Append("#Profiler.GetTotalUnusedReservedMemory:" + UnityEngine.Profiling.Profiler.GetTotalUnusedReservedMemory()/(1024f * 1024f) + "\n");
 
-			sum += Profiler.GetMonoHeapSize()/(1024f * 1024f);
-			sum += Profiler.GetTotalReservedMemory()/(1024f * 1024f);
+			sum += UnityEngine.Profiling.Profiler.GetMonoHeapSize()/(1024f * 1024f);
+			sum += UnityEngine.Profiling.Profiler.GetTotalReservedMemory()/(1024f * 1024f);
 
 			sb.Append("#Sum : " + sum);
 
@@ -103,7 +103,7 @@ public class FPSDisplay : MonoBehaviour {
 		float sum = 0;
 		StringBuilder sb = new StringBuilder();
 		foreach(Texture t in textures){
-			float use = Profiler.GetRuntimeMemorySize(t) / 1024f / 1024f;
+			float use = UnityEngine.Profiling.Profiler.GetRuntimeMemorySize(t) / 1024f / 1024f;
 			sb.Append(use + ":" + t.width + ":" + t.height + ":" + t.name + "\n");
 			sum += use;
 		}
@@ -118,7 +118,7 @@ public class FPSDisplay : MonoBehaviour {
 		float sum = 0;
 		StringBuilder sb = new StringBuilder();
 		foreach (var item in items){
-			float use = Profiler.GetRuntimeMemorySize(item) / 1024f / 1024f;
+			float use = UnityEngine.Profiling.Profiler.GetRuntimeMemorySize(item) / 1024f / 1024f;
 			sb.Append(use + ":" + item.name + "\n");
 			sum += use;
 		}
