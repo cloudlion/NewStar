@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.IO;
 using GameUtil;
+using Google.Protobuf;
 //using MVC;
 
 namespace GameNetWork
@@ -101,7 +102,7 @@ namespace GameNetWork
 
                     byte[] msg = new byte[msgLen];
                     Array.Copy(buffer, msg, msgLen);
-                    Array.Copy(buffer, msgLen, buffer, 0, Math.Min(dataLen, BUF_LEN - msgLen));
+                    Array.Copy(buffer, msgLen, buffer, 0, Mathf.Min(dataLen, BUF_LEN - msgLen));
                     
                     dataLen -= msgLen;
                     return msg;
@@ -238,7 +239,7 @@ namespace GameNetWork
 
         #endregion
 
-		public void SendMsg<T>(T proto, UInt16 appCode, UInt16 funcCode, int opCode, bool blockGame = false,Action<IProtocolHead,Operation> callback = null) where T : IProtocolHead
+		public void SendMsg<T>(T proto, UInt16 appCode, UInt16 funcCode, int opCode, bool blockGame = false,Action<IProtocolHead,Operation> callback = null) where T : IProtocolHead,IMessage<T>
         {
 //            if(typeof(T) != typeof(ProtoVO.common.HeartBeat))
 //                Logger.Log("ming request " + typeof(T).Name.ToString() + "...");

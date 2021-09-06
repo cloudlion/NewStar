@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using GameUtil;
-
+using Google.Protobuf;
 
 namespace ProtoVO
 {
@@ -145,7 +145,7 @@ namespace GameNetWork
 //        }
 
 
-		public virtual void SendHttpMsg<T>(T obj, string url, string method, bool getOriginData = false, bool needResp = true) where T: IProtocolHead
+		public virtual void SendHttpMsg<T>(T obj, string url, string method, bool getOriginData = false, bool needResp = true) where T: IProtocolHead, IMessage<T>
 		{
 			if (null == httpMsgRouter)
 			{
@@ -352,7 +352,7 @@ namespace GameNetWork
         }
         #endregion
 
-		public virtual void SendSockMsg<T>(T msg, int channel = 0, bool blockGame = false,Action<IProtocolHead,Operation> callback = null) where T : IProtocolHead
+		public virtual void SendSockMsg<T>(T msg, int channel = 0, bool blockGame = false,Action<IProtocolHead,Operation> callback = null) where T : IProtocolHead, IMessage<T>
         {
 			if (null == routers[channel])
             {
@@ -372,7 +372,7 @@ namespace GameNetWork
 
         }
 
-        public virtual void SendChatSockMsg<T>(T msg) where T : IProtocolHead
+        public virtual void SendChatSockMsg<T>(T msg) where T : IProtocolHead,IMessage<T>
         {
             SendSockMsg<T>(msg, SOCK_CHAT_CHANNEL);
         }

@@ -1465,8 +1465,8 @@ namespace GameUtil
 				return "0S";
 			
 			TimeSpan t = TimeSpan.FromSeconds(time);
-			unitsCnt = Math.Max(1, unitsCnt);
-			unitsCnt = Math.Min(4, unitsCnt);
+			unitsCnt = Mathf.Max(1, unitsCnt);
+			unitsCnt = Mathf.Min(4, unitsCnt);
 			
 			string units = "DHMS";
 			int[]  count = new int[]{t.Days, t.Hours, t.Minutes, t.Seconds};
@@ -1496,8 +1496,8 @@ namespace GameUtil
 		public static string FormatTime6T(long time, int unitsCnt = 4){
 			return FormatTime3 (time);
 			TimeSpan t = TimeSpan.FromSeconds(time);
-			unitsCnt = Math.Max(1, unitsCnt);
-			unitsCnt = Math.Min(4, unitsCnt);
+			unitsCnt = Mathf.Max(1, unitsCnt);
+			unitsCnt = Mathf.Min(4, unitsCnt);
 			
 			string[] units = new string[]{DI18n.T("common.day"), DI18n.T("common.hour"), DI18n.T("common.minute"), DI18n.T("common.second")};
 			int[]  count = new int[]{t.Days, t.Hours, t.Minutes, t.Seconds};
@@ -1553,8 +1553,8 @@ namespace GameUtil
 		
 		public static string FormatTime8(long time, int unitsCnt = 4){
 			TimeSpan t = TimeSpan.FromSeconds(time);
-			unitsCnt = Math.Max(1, unitsCnt);
-			unitsCnt = Math.Min(4, unitsCnt);
+			unitsCnt = Mathf.Max(1, unitsCnt);
+			unitsCnt = Mathf.Min(4, unitsCnt);
 			
 			string units = "DHMS";
 			int[]  count = new int[]{t.Days, t.Hours, t.Minutes, t.Seconds};

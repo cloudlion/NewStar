@@ -1,7 +1,9 @@
+syntax = "proto3"; 
+
 package math;
 
 message Grid {
 
-    required int32 x = 1 [default = 1];
-    required int32 y = 2 [default = 1];
+    int32 x = 1 ;
+    int32 y = 2 ;
 }

@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
+using Google.Protobuf;
 
 namespace GameUtil
 {
@@ -16,7 +17,7 @@ namespace GameUtil
             return (Int32)(((UInt32)appCode << 16) + (UInt32)funcCode);
         }
         
-        public static byte[] Serialize2Binary<T>(T proto, UInt16 appCode, UInt16 funcCode, int opCode) where T : IProtocolHead
+        public static byte[] Serialize2Binary<T>(T proto, UInt16 appCode, UInt16 funcCode, int opCode) where T : IProtocolHead,IMessage<T>
         {
             return Encode<T>(proto, appCode, funcCode, opCode);
         }
@@ -33,7 +34,8 @@ namespace GameUtil
 
         public static bool isErrorType(UInt16 funcCode)
         {
-            return funcCode == ProtoVO.common.error.GetFnCode();
+            return false;
+         //   return funcCode == ProtoVO.common.error.GetFnCode();
         }
 
 
@@ -105,7 +107,7 @@ namespace GameUtil
             return len;
         }
 
-        private static byte[] Encode<T>(T data, UInt16 appCode, UInt16 funcCode, int opCode) where T : IProtocolHead
+        private static byte[] Encode<T>(T data, UInt16 appCode, UInt16 funcCode, int opCode) where T : Google.Protobuf.IMessage<T>, IProtocolHead
         {
             if (null == data)
             {
@@ -118,13 +120,13 @@ namespace GameUtil
                 return  new byte[]{0, 0, 0 , 0};
             }
 
-            ProtoVO.common.packet  packet = new ProtoVO.common.packet ();
-            packet.funcode = funcCode;
-			packet.opcode = opCode;
-			packet.data = DataParser.Serialize<T>(data);
+            Common.packet  packet = new Common.packet ();
+            packet.Funcode = funcCode;
+			packet.Opcode = opCode;
+			packet.Data = Google.Protobuf.ByteString.CopyFrom( DataParser.Serialize<T>(data));
 
 
-			byte[] payload = DataParser.Serialize<ProtoVO.common.packet>(packet);
+			byte[] payload = DataParser.Serialize<Common.packet>(packet);
 			byte flag = FlagFromProto(data);
             
         //    ProcessFlag(payload, flag);
@@ -181,13 +183,13 @@ namespace GameUtil
             // payload
 			Array.Copy(package, hasHead?PAYLOAD_OFFSET:0, payload, 0, payloadLen);
 
-			ProtoVO.common.packet packet = DataParser.Deserialize<ProtoVO.common.packet>(payload) as ProtoVO.common.packet;
-			opCode = packet.opcode;
+			Common.packet packet = DataParser.Deserialize<Common.packet>(payload) as Common.packet;
+			opCode = packet.Opcode;
 //                // appCode & funcCode
-			funcCode = (UInt16)(packet.funcode & 0xFFFF);
+			funcCode = (UInt16)(packet.Funcode & 0xFFFF);
 //			UnityEngine.Debug.LogWarning("recieved packet funcode >>>>>>>>>>>>>>>>>>>>>>>" + funcCode);
 
-			if (packet.batchPackets.Count > 0)
+			if (packet.BatchPackets.Count > 0)
 			{
 //				UnityEngine.Debug.LogWarning("recieved batch packet >>>>>>>>>>>>>>>>>>>>>>>");
 				return packet;
@@ -204,7 +206,7 @@ namespace GameUtil
 				return null;
             try
             {
-				ph = DataParser.Deserialize(packet.data, targetType) as IProtocolHead;
+				ph = DataParser.Deserialize(packet.Data.ToByteArray(), targetType) as IProtocolHead;
             }
             catch(Exception e)
             {

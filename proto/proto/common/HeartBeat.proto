@@ -1,7 +1,8 @@
+syntax = "proto3"; 
 package common;
 
 message HeartBeat {
-    optional int32 time = 1;
+    int32 time = 1;
 }
 
 

@@ -3,29 +3,28 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using Google.Protobuf;
 
 namespace GameUtil
 {
     public class ProtoBufUtil
     {
-        public static byte[] Serialize<T>(T data)
+        public static byte[] Serialize<T>(T data) where T: IMessage<T>
         {
             if (null == data)
             {
                 Logger.LogError("Invalid input data!");
                 return null;
             }
-            
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
-            ProtoBuf.Serializer.Serialize<T>(ms, data);
-            
-            byte[] ret = ms.ToArray();
+
+            byte[] ret = data.ToByteArray();// ms.ToArray();
             ms.Close();
             
             return ret;
         }
         
-        public static T Deserialize<T>(byte[] bytes)
+        public static T Deserialize<T>(byte[] bytes) where T: IMessage<T>, new()
         {
             if (null == bytes)
             {
@@ -35,8 +34,9 @@ namespace GameUtil
             
             System.IO.MemoryStream ms = new System.IO.MemoryStream(bytes);
             ms.Position = 0;
-            
-            T ret = ProtoBuf.Serializer.Deserialize<T>(ms);
+
+            MessageParser<T> parser = new MessageParser<T>(() => new T());
+            T ret = parser.ParseFrom(ms);
             ms.Close();
             
             return ret;
@@ -48,9 +48,10 @@ namespace GameUtil
             
             MemoryStream ms = new MemoryStream(bytes);
             ms.Position = 0;
-            
-            obj =ProtoBuf.Meta.RuntimeTypeModel.Default.Deserialize(ms, obj, targetType, null); 
-            
+
+            obj = Activator.CreateInstance(targetType);//, Google.Protobuf.MessageParser .Meta.RuntimeTypeModel.Default.Deserialize(ms, obj, targetType, null); 
+
+            (obj as IMessage).MergeFrom(bytes);
             ms.Close();
             
             return obj;
@@ -96,7 +97,7 @@ namespace GameUtil
         {
             SimpleJsonConfig cfg = new SimpleJsonConfig();
             cfg.KeyFilter = FieldNameFilter;
-            cfg.excludes = excludes;
+         //   cfg.excludes = excludes;
             
             return SimpleJsonSerializer.Stringify(data, cfg);
         }
@@ -104,10 +105,10 @@ namespace GameUtil
         #region internal
         // Fight against c-sharp ProtoNet generation tool. avoiding
         // serialize IExtension to JSON output.
-        private static Type[] excludes = new Type[1]
-        {
-            typeof(global::ProtoBuf.IExtension)
-        };
+        //private static Type[] excludes = new Type[1]
+        //{
+        //    typeof(global::ProtoBuf.IExtension)
+        //};
         
         private static string FieldNameFilter(string fieldName)
         {
