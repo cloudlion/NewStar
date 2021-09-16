@@ -16,6 +16,14 @@ namespace ProtoVO
 	}
 }
 
+namespace gameprotos
+{
+	public sealed partial class NewUser : IProtocolHead
+    {
+
+    }
+}
+
 namespace GameNetWork
 {
 
