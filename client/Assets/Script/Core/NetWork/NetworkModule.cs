@@ -5,31 +5,12 @@ using System.Reflection;
 using GameUtil;
 using Google.Protobuf;
 
-namespace ProtoVO
-{
-	namespace common
-	{
-		
-		public partial class packet : IProtocolHead
-		{
-		}
-	}
-}
-
-namespace gameprotos
-{
-	public sealed partial class NewUser : IProtocolHead
-    {
-
-    }
-}
 
 namespace GameNetWork
 {
 
     public class NetworkModule
     {
-
 		public static int SOCK_GAME_CHANNEL = 0;
 		public static int SOCK_CHAT_CHANNEL = 1;
 		public static int SOCK_CHANNEL_COUNT = 2;
@@ -379,6 +360,16 @@ namespace GameNetWork
 			}
 
         }
+
+		public void SendSockRequest(string route)
+        {
+
+        }
+
+		public void SendHandShake()
+        {
+			routers[0].SendHandShake();
+		}
 
         public virtual void SendChatSockMsg<T>(T msg) where T : IProtocolHead,IMessage<T>
         {
