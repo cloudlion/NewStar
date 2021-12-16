@@ -3,36 +3,28 @@
 
 
 using System;
-namespace ProtoVO
+namespace GameProtos.common
 {
-    namespace common
-    {
-        public partial class HeartBeat : IProtocolHead
-        {
-            public static UInt16 GetAppCode()
-            {
-                return 0;
-            }
+		public partial class HeartBeat : IProtocolHead
+		{
+			public static UInt16 GetAppCode() {
+				return 0;
+			}
 
-            public static UInt16 GetFnCode()
-            {
-                return 0;
-            }
+			public static UInt16 GetFnCode() {
+				return 0;
+			}
 
-            public static byte GetFlag()
-            {
-                return 0;
-            }
+			public static byte GetFlag(){
+				return 0;
+			}
 
-            public static string GetUrl()
-            {
-                return "";
-            }
+			public static string GetUrl(){
+				return "";
+			}
 
-            public static string GetHttpMethod()
-            {
-                return "";
-            }
-        }
-    }
+			public static string GetHttpMethod() {
+				return "";
+			}
+		}
 }

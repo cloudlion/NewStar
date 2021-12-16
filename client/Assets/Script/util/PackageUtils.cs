@@ -5,12 +5,17 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using Google.Protobuf;
+using GameNetWork.Packet;
 
 namespace GameUtil
 {
     public class PackageUtils
     {
-		static int opcode = 0;
+        const int PKG_HEAD_BYTES = 4;
+        const int MSG_FLAG_BYTES = 1;
+        const int  MSG_ROUTE_CODE_BYTES = 2;
+
+        static int opcode = 0;
 
         public static Int32 GetProtocolID(UInt16 appCode, UInt16 funcCode)
         {
@@ -100,10 +105,14 @@ namespace GameUtil
             {
                 throw new Exception("Invalid package length!");
             }
-            
+
             // headLen is 4, ToInt32 fits.
-			int netLen = BitConverter.ToInt32 (package, HEAD_OFFSET);
-            int len = IPAddress.NetworkToHostOrder(BitConverter.ToInt32(package, HEAD_OFFSET)) + HEAD_LENGTH;
+            byte[] lenArray = new byte[4];
+            Array.Copy(package, 1, lenArray, 1, 3);
+            int contentLength = IPAddress.NetworkToHostOrder(BitConverter.ToInt32(lenArray, 0));
+
+          //  int netLen = BitConverter.ToInt32 (package, HEAD_OFFSET);
+            int len = contentLength + HEAD_LENGTH;
             return len;
         }
 
@@ -115,56 +124,44 @@ namespace GameUtil
                 return null;
             }
             
-            if ( typeof(T) == typeof(ProtoVO.common.HeartBeat) ) {
+            if ( typeof(T) == typeof(GameProtos.common.HeartBeat) ) {
 			
                 return  new byte[]{0, 0, 0 , 0};
             }
 
-            Common.packet  packet = new Common.packet ();
-            packet.Funcode = funcCode;
-			packet.Opcode = opCode;
-			packet.Data = Google.Protobuf.ByteString.CopyFrom( DataParser.Serialize<T>(data));
-
-
-			byte[] payload = DataParser.Serialize<Common.packet>(packet);
-			byte flag = FlagFromProto(data);
+            byte[] payload = EncodeMessage(data, MessageType.Notify, funcCode);
             
-        //    ProcessFlag(payload, flag);
+            byte[] package = EncodePacket(PacketType.Data, payload);
+            return package;
+        }
 
-            int totalLen = HEAD_LENGTH +  payload.Length;
-            
+        public static byte[] EncodePacket(PacketType type, byte[] data)
+        {
+            int totalLen = HEAD_LENGTH + (data != null?data.Length:0);
+
             //// payload
             byte[] package = new byte[totalLen];
-            Array.Copy(payload, 
-                       0, 
-                       package, 
-                       PAYLOAD_OFFSET, 
-                       payload.Length);            
-            
-//			Logger.Log ( Convert.ToBase64String(payload) );
-            // flag
-           // package[FLAG_OFFSET] = flag;
-            
-            // appCode & funcCode
-            //int protocolId = GetProtocolID(appCode, funcCode);
-//            Array.Copy (BitConverter.GetBytes(IPAddress.HostToNetworkOrder(protocolId)), 
-//                        0, 
-//                        package, 
-//                        PROTOCOL_ID_OFFSET, 
-//                        PROTOCOL_ID_LENGTH);
-            
-            //// head
-            byte[] lengthArray = BitConverter.GetBytes(IPAddress.HostToNetworkOrder(payload.Length));
-            Array.Copy (BitConverter.GetBytes(IPAddress.HostToNetworkOrder(payload.Length)), 
-                        0, 
-                        package, 
-                        HEAD_OFFSET, HEAD_LENGTH);
-            
+            package[0] = (byte)type;
+            if (data != null && data.Length > 0)
+            {
+                byte[] lengthArray = BitConverter.GetBytes(IPAddress.HostToNetworkOrder(data.Length));
+                Array.Copy(lengthArray,
+                            1,
+                            package,
+                            1, HEAD_LENGTH - 1);
+
+                Array.Copy(data,
+                        0,
+                        package,
+                        HEAD_LENGTH, data.Length);
+            }
+
             return package;
         }
 
         public static IProtocolHead Decode(byte[] package, ref UInt16 appCode, ref UInt16 funcCode, ref int opCode, bool hasHead = true)
         {
+            Debug.Log("decode message");
 			int packageLen = hasHead ?SupposedPackageLen(package): package.Length;
             if (packageLen != (package.Length))
             {
@@ -176,45 +173,83 @@ namespace GameUtil
                 return null;
             }
 
-
 			int payloadLen = packageLen - (hasHead?HEAD_LENGTH:0);
+            if (payloadLen == 0)
+                return null;
             byte[] payload = new byte[payloadLen];
-            
             // payload
 			Array.Copy(package, hasHead?PAYLOAD_OFFSET:0, payload, 0, payloadLen);
-
-			Common.packet packet = DataParser.Deserialize<Common.packet>(payload) as Common.packet;
-			opCode = packet.Opcode;
-//                // appCode & funcCode
-			funcCode = (UInt16)(packet.Funcode & 0xFFFF);
-//			UnityEngine.Debug.LogWarning("recieved packet funcode >>>>>>>>>>>>>>>>>>>>>>>" + funcCode);
-
-			if (packet.BatchPackets.Count > 0)
-			{
-//				UnityEngine.Debug.LogWarning("recieved batch packet >>>>>>>>>>>>>>>>>>>>>>>");
-				return packet;
-			}
-
-//            appCode = (UInt16)(protocolId >> 16);
-//            funcCode = (UInt16)(protocolId & 0xFF);
-
-//     //       ProcessFlag(payload, flag);
+			opCode = 0;
+            IProtocolHead ph = DecodeMessage(payload, ref appCode, ref funcCode);
             
+            return ph;
+        }
+
+ /*       public static IProtocolHead Decode(Packet packet, ref UInt16 appCode, ref UInt16 funcCode, ref int opCode, bool hasHead = true)
+        {
+            Debug.Log("decode message");
+            int payloadLen = packet.length;
+            byte[] payload = new byte[payloadLen];
+
+            // payload
+            Array.Copy(packet.data, PAYLOAD_OFFSET, payload, 0, payloadLen);
+            opCode = 0;
+            IProtocolHead ph = DecodeMessage(packet.data, ref appCode,ref funcCode);
+
+            return ph;
+        }*/
+
+        static byte[] EncodeMessage<T>(T data, MessageType type, UInt16 code) where T : Google.Protobuf.IMessage<T>, IProtocolHead
+        {
+            byte[] payload = DataParser.Serialize<T>(data);
+            byte flag = Convert.ToByte((int)type);
+            byte[] codeArray = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((Int16)code));
+            flag <<= 1;
+            flag |= 1;
+            int idBytes = 0;
+            if (type == MessageType.Request || type == MessageType.Response)
+                idBytes = 1;
+
+            int msgLen = FLAG_LENGTH + payload.Length + MSG_ROUTE_CODE_BYTES + idBytes;
+            byte[] msgData = new byte[msgLen];
+            int offset = 0;
+            msgData[offset++] = flag;
+            if (type == MessageType.Request || type == MessageType.Response)
+                msgData[offset++] = 1;
+            msgData[offset++] = codeArray[0];
+            msgData[offset++] = codeArray[1];
+            Array.Copy(payload,
+                        0,
+                        msgData,
+                        offset, payload.Length);
+            return msgData;
+        }
+
+        private static IProtocolHead DecodeMessage(byte[] data, ref UInt16 appCode, ref UInt16 funcCode)
+        {
             IProtocolHead ph = null;
+
+            appCode = 0;
+            funcCode = (UInt16)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(data, 1));
             System.Type targetType = GetProtocolType(appCode, funcCode);
-			if (targetType == null)
-				return null;
+            Debug.Log("decode message: " + targetType);
+            if (targetType == null)
+                return null;
             try
             {
-				ph = DataParser.Deserialize(packet.Data.ToByteArray(), targetType) as IProtocolHead;
+                int len = data.Length - 3;
+                byte[] msgData = new byte[len];
+                Array.Copy(data,
+                        3,
+                        msgData,
+                        0, len);
+                ph = DataParser.Deserialize(msgData, targetType) as IProtocolHead;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-				//Debug.Log ("exception ==" + e.Message);
-                //Logger.LogError("Deserialize protobuf exception! clsName = " + targetType.Name);
-//                Logger.LogException(e);
+                Debug.LogError("exception ==" + e.Message);
             }
-            
+
             return ph;
         }
 

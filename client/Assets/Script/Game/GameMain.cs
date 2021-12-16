@@ -1,11 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GameNetWork;
+using MVC;
 
-public class GameMain : MonoBehaviour
+public class GameMain : Singleton<GameMain>
 {
     GameNetWork.NetworkModule network = null;
-    // Start is called before the first frame update
+    public MVC.MediatorMgr mediatorMgr { get; private set; }
+    public override void Awake()
+    {
+        base.Awake();
+        mediatorMgr = new MVC.MediatorMgr();
+        mediatorMgr.Start();
+    }
+
     void Start()
     {
         Math.Grid grid = new Math.Grid()
@@ -14,27 +23,39 @@ public class GameMain : MonoBehaviour
             Y = 13,
         };
 
-       byte[] data = GameUtil.DataParser.Serialize<Math.Grid>(grid);
-        Math.Grid grid2 = GameUtil.DataParser.Deserialize<Math.Grid>(data);
-        Debug.Log(grid2);
-        network = new GameNetWork.NetworkModule(new GameNetWork.HttpMgr());
-        network.Start();
-        network.SockConnect("127.0.1",3250, 0, () => { Debug.Log("connected"); }, null);
+       //byte[] data = GameUtil.DataParser.Serialize<Math.Grid>(grid);
+       // Math.Grid grid2 = GameUtil.DataParser.Deserialize<Math.Grid>(data);
+       // Debug.Log(grid2);
+        //   network.RegisterSockHandler<gameprotos.UserMessage>(ShowNewMessage);
+        Invoke("InitSystem", 0.1f);
     }
 
+    private void OnConnectedToServer()
+    {
+        Debug.Log("connected");
+        network.SendHandShake();
+        
+    }
     // Update is called once per frame
     void Update()
     {
-        
     }
 
-    private void OnGUI()
+
+
+    void ShowNewMessage(SockMsgRouter router, IProtocolHead ph)
     {
-        if(GUI.Button(new Rect(100, 200, 300, 100), "Join"))
-        {
-            gameprotos.NewUser newUser = new gameprotos.NewUser();
-            newUser.Content = "hello";
-            network.SendSockMsg(newUser);
-        }
+        Debug.Log("get message: " + (ph as GameProtos.common.UserMessage).Content);
+    }
+
+    void InitSystem()
+    {
+        RegisterProxies();
+    }
+
+    void RegisterProxies()
+    {
+        ProxyMgr.Instance.Register(new AccountProxy());
+        ProxyMgr.Instance.Register(new RoomProxy());
     }
 }

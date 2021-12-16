@@ -205,7 +205,7 @@ namespace GameNetWork
 				
 				sendThread = new Thread(new ThreadStart(this.Send));
 				sendThread.Start();
-//				if(OnConnected != null)OnConnected();
+				if(OnConnected != null)OnConnected();
 			}
 			catch (Exception e)
 			{
@@ -414,7 +414,7 @@ namespace GameNetWork
                                          SocketFlags.None);
                     if (s == 0)
                     {
-                        interrupted = true;
+                  //      interrupted = true;
                         return;
                     }
                     recvSize = s;
@@ -494,6 +494,7 @@ namespace GameNetWork
                 }
                 else
                 {
+                    Debug.LogError(ex);
                     HandleException(ex);
                 }
                 interrupted = true;

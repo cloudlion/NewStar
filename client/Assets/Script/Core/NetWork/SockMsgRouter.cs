@@ -93,8 +93,10 @@ namespace GameNetWork
                     {
                         return null;
                     }
-                    
-					int msgLen = IPAddress.NetworkToHostOrder(BitConverter.ToInt32(buffer, 0)) + GameUtil.PackageUtils.HEAD_LENGTH;
+                    byte[] lenArray = new byte[4];
+                    Array.Copy(buffer, 1, lenArray, 1,3);
+                    int contentLength = IPAddress.NetworkToHostOrder(BitConverter.ToInt32(lenArray, 0));
+                    int msgLen = contentLength + GameUtil.PackageUtils.HEAD_LENGTH;
                     if (dataLen < msgLen)
                     {
                         return null;
@@ -260,7 +262,14 @@ namespace GameNetWork
             }
         }
 
-		public void ClearBuff(bool clearOperations)
+        public void SendHandShake()
+        {
+            byte[] bytes = PackageUtils.EncodePacket(Packet.PacketType.HandshakeAck, null);
+            Send(bytes);
+        }
+
+
+        public void ClearBuff(bool clearOperations)
 		{
 			sendStream.Clear ();
 			if(clearOperations)
@@ -280,6 +289,7 @@ namespace GameNetWork
 
         protected override void HandleMsg(byte[] data)
         {
+            Debug.Log("recieved message");
             UInt16 appCode = 0, funcCode = 0;
 			int opCode = 0;
 			IProtocolHead ph = PackageUtils.Deserialize2Proto(data, ref appCode, ref funcCode, ref opCode);
@@ -357,12 +367,9 @@ namespace GameNetWork
 
 		private void HandleCallBack(IProtocolHead ph,int callBackId,Operation op,int opCode)
 		{
-			Delegate func = handlerMap[callBackId];
-    /*        if ((ph is ProtoVO.common.error) && errorCallBack.ContainsKey(opCode)) {
-                    Action<IProtocolHead,Operation> callback = errorCallBack [opCode];
-                    errorCallBack.Remove (opCode);
-                    callback (ph, op);	//ph is protovo.common.error
-		    }else*/ if(func != null) {
+            Delegate func = null;
+            handlerMap.TryGetValue(callBackId, out func);
+            if(func != null) {
                 ((MsgHandler)func)(this, ph);
 
 //                if(ph.GetType() != typeof(ProtoVO.common.HeartBeat))
