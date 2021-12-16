@@ -5,7 +5,6 @@ using System.Reflection;
 using GameUtil;
 using Google.Protobuf;
 
-
 namespace GameNetWork
 {
 
@@ -22,6 +21,7 @@ namespace GameNetWork
 
 		public Action LostConnection = null;
 		public Action Timeout = null;
+		private Dictionary<Type, int> funcCodeMap;
 //        public SockMsgRouter SockRouter
 //        {
 //            get { return sockMsgRouter; }
@@ -54,6 +54,13 @@ namespace GameNetWork
 			sockMgr.Start();
 
 			routers = new SockMsgRouter[SOCK_CHANNEL_COUNT];
+			for(int i=0;i< AppFnMapping.MAPPING.Length;i++)
+            {
+				if(AppFnMapping.MAPPING[i] != null)
+                {
+
+                }
+            }
         }
 
         public virtual void ShutDown()

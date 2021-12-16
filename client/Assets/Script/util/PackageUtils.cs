@@ -124,7 +124,7 @@ namespace GameUtil
                 return null;
             }
             
-            if ( typeof(T) == typeof(ProtoVO.common.HeartBeat) ) {
+            if ( typeof(T) == typeof(GameProtos.common.HeartBeat) ) {
 			
                 return  new byte[]{0, 0, 0 , 0};
             }
@@ -232,11 +232,18 @@ namespace GameUtil
             appCode = 0;
             funcCode = (UInt16)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(data, 1));
             System.Type targetType = GetProtocolType(appCode, funcCode);
+            Debug.Log("decode message: " + targetType);
             if (targetType == null)
                 return null;
             try
             {
-                ph = DataParser.Deserialize(data, targetType) as IProtocolHead;
+                int len = data.Length - 3;
+                byte[] msgData = new byte[len];
+                Array.Copy(data,
+                        3,
+                        msgData,
+                        0, len);
+                ph = DataParser.Deserialize(msgData, targetType) as IProtocolHead;
             }
             catch (Exception e)
             {

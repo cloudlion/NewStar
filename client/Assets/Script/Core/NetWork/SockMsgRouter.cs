@@ -367,7 +367,8 @@ namespace GameNetWork
 
 		private void HandleCallBack(IProtocolHead ph,int callBackId,Operation op,int opCode)
 		{
-			Delegate func = handlerMap[callBackId];
+            Delegate func = null;
+            handlerMap.TryGetValue(callBackId, out func);
             if(func != null) {
                 ((MsgHandler)func)(this, ph);
 
