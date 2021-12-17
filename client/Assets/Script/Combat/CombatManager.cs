@@ -35,13 +35,15 @@ public class CombatManager : Mediator
         Debug.Log("new user: " + newUser.Name);
         GameProtos.common.NewUser playerData = (evt as RoomEvent).newUser;
         Player player = Instantiate(playerPrefab).GetComponent<Player>();
-        player.Init(playerData.Uid, playerData.Name);
+        int myID = proxyMgr.GetProxy<AccountProxy>().ID;
+        player.Init(playerData.Uid, playerData.Name, newUser.Uid == myID);
         players.Add(newUser.Uid, player);
     }
 
     void OnAllMembers(GameEngine.Event evt)
     {
         var members  = (evt as RoomEvent).allMembers.Members;
+        int myID = proxyMgr.GetProxy<AccountProxy>().ID;
 
         for (int i = 0; i < members.Count; i++)
         {
@@ -49,7 +51,7 @@ public class CombatManager : Mediator
             if (players.ContainsKey(uid))
                 continue;
             Player player = Instantiate(playerPrefab).GetComponent<Player>();
-            player.Init(uid, members[i]);
+            player.Init(uid, members[i], myID == uid);
             players.Add(uid, player);
         }
     }
