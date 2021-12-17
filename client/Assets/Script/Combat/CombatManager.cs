@@ -6,7 +6,7 @@ using MVC;
 public class CombatManager : Mediator
 {
     public GameObject playerPrefab;
-    private Dictionary<int, Player> players;
+    private Dictionary<int, Player> players = new Dictionary<int, Player>();
     public override void Start()
     {
         base.Start();
@@ -17,7 +17,10 @@ public class CombatManager : Mediator
     {
         base.RegisterEventHandler();
         RegisterEventHandler(RoomEvent.Join, OnJoinSucess);
+        RegisterEventHandler(RoomEvent.AllMembers, OnAllMembers);
+
         RegisterEventHandler(PlayerActionEvent.Move, OnPlayerMove);
+
     }
 
     protected override void UnregisterEventHandler()
@@ -33,6 +36,22 @@ public class CombatManager : Mediator
         GameProtos.common.NewUser playerData = (evt as RoomEvent).newUser;
         Player player = Instantiate(playerPrefab).GetComponent<Player>();
         player.Init(playerData.Uid, playerData.Name);
+        players.Add(newUser.Uid, player);
+    }
+
+    void OnAllMembers(GameEngine.Event evt)
+    {
+        var members  = (evt as RoomEvent).allMembers.Members;
+
+        for (int i = 0; i < members.Count; i++)
+        {
+            int uid = int.Parse(members[i]);
+            if (players.ContainsKey(uid))
+                continue;
+            Player player = Instantiate(playerPrefab).GetComponent<Player>();
+            player.Init(uid, members[i]);
+            players.Add(uid, player);
+        }
     }
 
     void OnPlayerMove(GameEngine.Event evt)

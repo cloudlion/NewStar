@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     {
         id = uid;
         this.userName = userName;
+        gameObject.name = uid.ToString();
     }
 
     // Update is called once per frame

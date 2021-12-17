@@ -22,7 +22,7 @@ public class RoomProxy : Proxy
         base.RegisterNetworkHandler();
         RegisterSockHandler<Move>(OnPlayerMove);
         RegisterSockHandler<NewUser>(OnNewUser);
-
+        RegisterSockHandler<AllMembers>(OnAllMembers);
     }
 
     public void Move(int playerId, Vector3 pos)
@@ -55,6 +55,11 @@ public class RoomProxy : Proxy
         }
 
         SendEvent(new RoomEvent(RoomEvent.Join, data));
+    }
+
+    void OnAllMembers(SockRouter router, IProtocolHead ph)
+    {
+
     }
 
     void OnPlayerMove(SockRouter router, IProtocolHead ph)
