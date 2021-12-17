@@ -12,7 +12,7 @@ public class RoomProxy : Proxy
     public class Player
     {
         public string playerName;
-        public Vector2 position;
+        public Vector3 position;
         public int uid;
     }
 
@@ -59,7 +59,19 @@ public class RoomProxy : Proxy
 
     void OnAllMembers(SockRouter router, IProtocolHead ph)
     {
-
+        AllMembers data = ph as AllMembers;
+        for (int i = 0; i < data.Members.Count; i++)
+        {
+            int uid = int.Parse(data.Members[i]);
+            if (players.ContainsKey(uid))
+                continue;
+            players.Add(uid, new Player
+            {
+                playerName = data.Members[i],
+                uid = uid
+            });
+        }
+        SendEvent(new RoomEvent(RoomEvent.AllMembers, data));
     }
 
     void OnPlayerMove(SockRouter router, IProtocolHead ph)
