@@ -34,6 +34,8 @@ public class CombatManager : Mediator
         GameProtos.common.NewUser newUser = (evt as RoomEvent).newUser;
         Debug.Log("new user: " + newUser.Name);
         GameProtos.common.NewUser playerData = (evt as RoomEvent).newUser;
+        if (players.ContainsKey(playerData.Uid))
+            return;
         Player player = Instantiate(playerPrefab).GetComponent<Player>();
         int myID = proxyMgr.GetProxy<AccountProxy>().ID;
         player.Init(playerData.Uid, playerData.Name, newUser.Uid == myID);
