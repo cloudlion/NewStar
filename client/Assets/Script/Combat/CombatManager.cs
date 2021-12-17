@@ -62,7 +62,7 @@ public class CombatManager : Mediator
     {
         GameProtos.common.Move move = (evt as PlayerActionEvent).moveData;
         int myID = proxyMgr.GetProxy<AccountProxy>().ID;
-        if (myID != move.Id)
+        if (myID != move.Id && players.ContainsKey(move.Id))
             players[move.Id].SyncPosition(new Vector3(move.X, move.Y, move.Z));
     }
 }
